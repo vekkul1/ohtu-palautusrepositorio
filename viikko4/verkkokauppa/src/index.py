@@ -28,6 +28,8 @@ def main():
     for tapahtuma in kirjanpito.tapahtumat:
         print(tapahtuma)
 
+def second():
+    print("Hello World!")
 
 if __name__ == "__main__":
     main()
