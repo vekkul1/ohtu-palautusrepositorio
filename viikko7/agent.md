@@ -1,0 +1,5 @@
+Agentti päätyi toimivaan ratkaisuun, mutta ei ilman virheitä. Agentti kuitenkin osasi diagnosoida ongelmat ja korjata ne. Varmistuin, että ratkaisu toimii kokeilemalla itse applikaatiota ja lukemalla testejä, jotka vaikutti järkeviltä. Olen 90% varma, että agentin rakentama koodi toimii oikein. 
+Agentille ei pitänyt antaa liikaa komentoja, esim. se osasi testata jokaisen lisäyksen jälkeen ja lisätä automaattisesti niille testit. 
+Agentin testit ovat simppeleitä ja varmistavat, että sivulta löytyy oikeat tiedot ja kokeilee simppeleitä siirtojen yhdistelmiä. Agentin tekemä koodi on ymmärrettävää, mutta kun peliin lyödään muutama puoliksi tuttu asia ja se ettei koodia ole itse kirjoittanut ymmärrys heikkenee huomattavasti verrattaessa omaan koodiin.
+Ainoa muutos jonka agentti teki alkuperäiseen koodiin oli, että se lisäsi tuomari luokkaan kolme funktiota: tulos, voittaja, onko_peli_loppu. Näillä se käsittelee pelin tilaa. 
+Opin siitä kuinka käyttää github copilotia ja että agentit ovat tehokkaita koodaamaan, mutta tuottavat helposti teknistä velkaan jos sen tekemän koodin ymmärtäminen jää huonolle tasolle.

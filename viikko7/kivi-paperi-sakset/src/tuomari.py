@@ -34,3 +34,22 @@ class Tuomari:
             return True
 
         return False
+
+    def tulos(self, eka, toka):
+        """Return 'eka' if first player won the round, 'toka' if second player won, 'tasapeli' if tie."""
+        if self._tasapeli(eka, toka):
+            return 'tasapeli'
+        if self._eka_voittaa(eka, toka):
+            return 'eka'
+        return 'toka'
+
+    def voittaja(self, tavoite=5):
+        """Return 'eka' if first player has reached target points, 'toka' if second player, otherwise None."""
+        if self.ekan_pisteet >= tavoite:
+            return 'eka'
+        if self.tokan_pisteet >= tavoite:
+            return 'toka'
+        return None
+
+    def onko_peli_loppu(self, tavoite=5):
+        return self.voittaja(tavoite) is not None

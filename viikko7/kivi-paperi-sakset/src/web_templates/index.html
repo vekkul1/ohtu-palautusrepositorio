@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kivi Paperi Sakset - Web</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <main class="container">
+      <h1>Kivi Paperi Sakset</h1>
+
+      <section class="score">
+        <h2>Pistelasku</h2>
+        <pre>{{ tuomari }}</pre>
+      </section>
+
+      {% if winner %}
+        <section class="winner">
+          <h2>Voittaja!</h2>
+          <p>{{ winner }} on voittanut pelin ensimmäisen saavuttaessa 5 pistettä.</p>
+          <p><a href="/reset">Aloita uudelleen</a></p>
+        </section>
+      {% endif %}
+
+      {% if round_flash %}
+        <div id="round-flash" class="flash">{{ round_flash }}</div>
+        <script>
+          // auto-hide the flash after 2s
+          setTimeout(()=>{
+            const f = document.getElementById('round-flash')
+            if(f) f.style.display = 'none'
+          }, 2000)
+        </script>
+      {% endif %}
+
+      <section class="actions">
+        <div class="modes">
+          <label><input type="radio" name="mode_select" value="basic" {% if mode=='basic' %}checked{% endif %}> Tekoäly</label>
+          <label><input type="radio" name="mode_select" value="improved" {% if mode!='basic' and mode!='pvp' %}checked{% endif %}> Parannettu tekoäly</label>
+          <label><input type="radio" name="mode_select" value="pvp" {% if mode=='pvp' %}checked{% endif %}> Kaksi pelaajaa</label>
+        </div>
+
+        <form id="ai-form" method="post" action="/play" style="margin-top:12px;">
+          <div class="choices">
+            <button name="move" value="k">Kivi</button>
+            <button name="move" value="p">Paperi</button>
+            <button name="move" value="s">Sakset</button>
+          </div>
+        </form>
+
+        <form id="pvp-form" method="post" action="/play" style="display:none;margin-top:12px;">
+          <input type="hidden" name="mode" value="pvp">
+          <input type="hidden" name="move1" id="pvp-move1">
+          <input type="hidden" name="move2" id="pvp-move2">
+
+          <div id="p1-choices" class="choices">
+            <p><strong>Pelaaja 1 valitsee:</strong></p>
+            <button type="button" data-move="k">Kivi</button>
+            <button type="button" data-move="p">Paperi</button>
+            <button type="button" data-move="s">Sakset</button>
+          </div>
+
+          <div id="p2-choices" class="choices" style="display:none; margin-top:10px;">
+            <p><strong>Pelaaja 2 valitsee:</strong></p>
+            <button type="button" data-move="k">Kivi</button>
+            <button type="button" data-move="p">Paperi</button>
+            <button type="button" data-move="s">Sakset</button>
+          </div>
+        </form>
+
+        <script>
+          const modeRadios = document.getElementsByName('mode_select')
+          const aiForm = document.getElementById('ai-form')
+          const pvpForm = document.getElementById('pvp-form')
+
+          function currentMode(){
+            for(const r of modeRadios) if(r.checked) return r.value
+            return 'basic'
+          }
+
+          function updateVisibility(){
+            const m = currentMode()
+            if(m === 'pvp'){
+              aiForm.style.display = 'none'
+              pvpForm.style.display = 'block'
+            } else {
+              aiForm.style.display = 'block'
+              pvpForm.style.display = 'none'
+            }
+          }
+
+          // ensure mode value is posted with either form
+          function attachModeOnSubmit(form){
+            form.addEventListener('submit', function(e){
+              const existing = form.querySelector('input[name="mode"]')
+              if(existing) existing.value = currentMode()
+              else{
+                const hid = document.createElement('input')
+                hid.type='hidden'
+                hid.name='mode'
+                hid.value=currentMode()
+                form.appendChild(hid)
+              }
+            })
+          }
+
+          for(const r of modeRadios) r.addEventListener('change', updateVisibility)
+          attachModeOnSubmit(aiForm)
+          attachModeOnSubmit(pvpForm)
+          // PvP two-step flow
+          const p1 = document.getElementById('p1-choices')
+          const p2 = document.getElementById('p2-choices')
+          const hid1 = document.getElementById('pvp-move1')
+          const hid2 = document.getElementById('pvp-move2')
+          if(p1 && p2){
+            p1.querySelectorAll('button[data-move]').forEach(b => {
+              b.addEventListener('click', () => {
+                hid1.value = b.getAttribute('data-move')
+                p1.style.display = 'none'
+                p2.style.display = 'block'
+              })
+            })
+
+            p2.querySelectorAll('button[data-move]').forEach(b => {
+              b.addEventListener('click', () => {
+                hid2.value = b.getAttribute('data-move')
+                // submit the pvp form
+                document.getElementById('pvp-form').submit()
+              })
+            })
+          }
+          // initial visibility
+          updateVisibility()
+        </script>
+      </section>
+
+      <section class="last">
+        <h3>Viimeisin siirto</h3>
+        {% if last_player %}
+          {% if mode=='pvp' %}
+            <p>Pelaaja 1: {{ last_player }} — Pelaaja 2: {{ last_ai }}</p>
+          {% else %}
+            <p>Sinä: {{ last_player }} — Tietokone: {{ last_ai }}</p>
+          {% endif %}
+        {% else %}
+          <p>Ei siirtoja vielä.</p>
+        {% endif %}
+      </section>
+
+      <p><a href="/reset">Nollaa peli</a></p>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+body{font-family:Segoe UI,Arial,Helvetica,sans-serif;background:#f7f7fb;color:#222;margin:0;padding:0}
+.container{max-width:680px;margin:40px auto;padding:20px;background:#fff;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+h1{margin-top:0}
+.choices button{margin:6px;padding:10px 18px;font-size:16px}
+.modes{margin-bottom:12px}
+.score pre{background:#f0f3ff;padding:10px;border-radius:6px}
+.last p{font-weight:600}
+
+.flash{background:#fff4d6;border:1px solid #ffd66b;padding:10px;border-radius:6px;margin:12px 0;font-weight:700;text-align:center}

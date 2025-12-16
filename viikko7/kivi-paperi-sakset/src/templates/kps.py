@@ -23,7 +23,7 @@ class KiviPaperiSakset:
     def _ensimmaisen_siirto(self):
         return input("Ensimmäisen pelaajan siirto: ")
 
-    def _toisen_siirto(self):
+    def _toisen_siirto(self, ekan_siirto):
         raise Exception("No gamemode selected!")
 
     def _onko_ok_siirto(self, siirto):
